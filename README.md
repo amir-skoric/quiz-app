@@ -1,1 +1,1 @@
-Quiz app lavet med MongoDB og express
+Quiz app lavet med MongoDB, Mongoose og Express
