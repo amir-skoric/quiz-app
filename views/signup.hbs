@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../public/css/pico.min.css">
+    <title>Sign Up</title>
 </head>
 <body>
-    <h1>Sign Up</h1>
-    <form action="/signup" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="email" name="email" placeholder="E-mail" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit">
-    </form>
+    <main class="container">
+        <h1>Sign Up</h1>
+        <form action="/signup" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="E-mail" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit">
+        </form>
         <a href="/login">Already have an account? Login here!</a>
+    </main>
 </body>
 </html>
