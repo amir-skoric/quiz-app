@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,6 @@
     "express-handlebars": "^7.0.2",
     "express-session": "^1.17.3",
     "mongoose": "^7.0.1",
-    "uuid": "^9.0.0"
+    "nodemon": "^2.0.21"
   }
 }
