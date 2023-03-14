@@ -20,7 +20,7 @@ const schQuiz = new mongoose.Schema( {
     },
     questions: {
         type: Array,
-        "default": [],
+        "default": [String],
         required: true
     }
 })

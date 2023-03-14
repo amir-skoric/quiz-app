@@ -1,0 +1,24 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../public/css/pico.min.css" />
+    <title>Add Quiz</title>
+  </head>
+  <body>
+    {{> header}}
+    <main class="container">
+      <h1>Add your quiz</h1>
+      <form action="/login" method="POST">
+        <label for="quizName">Quiz Name</label>
+        <input type="text" name="quizName" placeholder="Quiz Name" required />
+        <label for="category">Category</label>
+        <input type="text" name="category" placeholder="Category" required />
+        <label for="question">Question</label>
+        <input type="text" name="question" placeholder="Question" required />
+        <input type="submit" value="Add Quiz" />
+      </form>
+    </main>
+  </body>
+</html>

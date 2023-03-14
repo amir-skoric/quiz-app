@@ -4,8 +4,6 @@ require("dotenv").config();
 //Define imports (require)
 const express = require("express");
 const sessions = require("express-session");
-const crypto = require("crypto");
-const bcrypt = require("bcrypt");
 const exphbs = require("express-handlebars");
 const userCollection = require("./database/schemas/userCollection");
 const path = require("path");
@@ -74,15 +72,12 @@ function redirectToIndexIfLoggedIn(req, res, next) {
   next();
 }
 
-//Routes
-app.get('/', auth, noCache, async (req, res) => {
+//Page routes
+//Frontpage (if logged in)
+app.get('/', auth, noCache, redirectToIndexIfLoggedIn, async (req, res) => {
   const user = await userCollection.findOne({ username: req.session.userid });
   res.render('index', { user: user.username });
 });
-
-//Middleware function for redirectToIndexIfLoggedIn
-app.get('/', redirectToIndexIfLoggedIn);
-
 //login route
 app.get('/login', noCache, redirectToIndexIfLoggedIn, (req, res) => {
   res.render("login");
@@ -99,61 +94,26 @@ app.get('/account', auth, noCache, async (req, res) => {
     res.render('account', { user: user.username, email: user.email, password: user.password});
 })
 
-//Database insertions
+//Add quiz page
+app.get('/addQuiz', auth, noCache, async (req, res) => {
+  res.render('addQuiz')
+})
+
+//API Routes
 //Signup
-app.post('/signup', async (req, res) => {
-  //Defining user object
-  const user = {
-    username: req.body.username,
-    email: req.body.email,
-    uuid: crypto.randomUUID(),
-    password: req.body.password,
-  };
-  //Checking if a user with the same username or email exists
-  const checkUsername = await userCollection.exists({
-    username: req.body.username,
-  });
-  const checkEmail = await userCollection.exists({ email: req.body.email });
-  //If the user doesn't exist, insert into the database
-  if (checkUsername === null && checkEmail === null) {
-    //Hash password
-    user.password = await bcrypt.hash(user.password, 10);
-    await userCollection.insertMany([user]);
-    //delete local user object
-    delete user;
-    res.redirect('/');
-  } else {
-    //error if username or email is in use
-    return res.json({ error: "Username or E-mail already in use!" });
-  }
-});
+app.post('/signup', require('./controller/signup'))
 
 //Login
-app.post('/login', async (req, res) => {
-  try {
-    const user = await userCollection.findOne({ username: req.body.username });
+app.post('/login', require('./controller/login'))
 
-    //if no user is found, an epic fail will ensue
-    if (!user) {
-      return res.json({ error: "Wrong user credentials!" });
-    } else {
-      //Comparing the hashed passwords, and if they match, set the session
-      if (await bcrypt.compare(req.body.password, user.password)) {
-        req.session.userid = req.body.username;
-        req.session.isAuthenticated = true;
-        res.redirect("/");
-      }
-    }
-  } catch {
-    return res.json({ error: "Wrong user credentials!" });
-  }
-});
+//Update account
+app.post('/updateUser', require('./controller/updateUser'))
+
+//Delete account
+app.post('/deleteUser', require('./controller/deleteUser'))
 
 //Sign-out (delete session)
-app.get('/signout', noCache, (req, res) => {
-  req.session.destroy();
-  res.redirect("/login");
-});
+app.get('/signout', require('./controller/signout'))
 
 //Members api routes
 app.use('/api/members', require('../routes/api/members'))

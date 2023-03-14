@@ -13,14 +13,17 @@
           <h1>Change your account details here 😉</h1>
           <h2>Account Details</h2>
         </hgroup>
-        <form action="/account" method="PUT">
+        <form action="/updateUser" method="POST">
             <label for="username">Username</label>
                 <input type="text" name="username" value="{{ user }}" required>
             <label for="email">E-mail</label>
                 <input type="email" name="email" value="{{ email }}" required>
             <label for="password">Password</label>
-                <input type="password" name="password" required>
+                <input type="password" name="password" minlength="8" required>
             <input type="submit" value="Update" />
+        </form>
+        <form action="/deleteUser" method="POST">
+          <input type="submit" value="Delete Account" style="background-color: rgb(255, 29, 29); border: none;">
         </form>
     </main>
   </body>
