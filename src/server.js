@@ -7,7 +7,7 @@ const sessions = require("express-session");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const exphbs = require("express-handlebars");
-const userCollection = require("./database");
+const userCollection = require("./database/schemas/userCollection");
 const path = require("path");
 
 //"Initialize" express
