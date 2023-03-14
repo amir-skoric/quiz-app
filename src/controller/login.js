@@ -1,5 +1,5 @@
 const userCollection = require('../database/schemas/userCollection')
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 //Login
 module.exports = async (req, res) => {

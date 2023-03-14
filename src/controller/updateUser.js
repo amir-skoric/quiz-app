@@ -1,5 +1,5 @@
 const userCollection = require('../database/schemas/userCollection');
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 module.exports = async (req, res) => {
     //Find the current user that is logged
@@ -17,7 +17,6 @@ module.exports = async (req, res) => {
       //delete local user object
       delete user;
       req.session.isAuthenticated = false;
-      res.status(200);
       res.redirect('/');
       //Update current user
       }

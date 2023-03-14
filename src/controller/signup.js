@@ -1,5 +1,5 @@
 const userCollection = require('../database/schemas/userCollection');
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 const crypto = require('crypto')
 
 //Signup
@@ -10,6 +10,7 @@ module.exports = async (req, res) => {
       email: req.body.email,
       uuid: crypto.randomUUID(),
       password: req.body.password,
+      profilePic: "https://source.unsplash.com/random"
     };
     //Checking if a user with the same username or email exists
     const checkUsername = await userCollection.exists({

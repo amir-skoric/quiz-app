@@ -7,10 +7,17 @@ const sessions = require("express-session");
 const exphbs = require("express-handlebars");
 const userCollection = require("./database/schemas/userCollection");
 const path = require("path");
+const morgan = require('morgan');
+const uuid = require('uuid')
+//Middleware imports
+const auth = require('./middleware/auth')
+const noCache = require('./middleware/noCache')
+const redirectToIndexIfLoggedIn = require('./middleware/redirectToIndexIfLoggedIn')
 
 //"Initialize" express
 const app = express();
 
+//Middlewarez
 //For importing CSS
 app.use("/public", express.static("public"));
 
@@ -21,11 +28,15 @@ app.use(express.urlencoded({ extended: false }));
 //Sessions
 app.use(
   sessions({
+    genid: (req) => {
+      return uuid.v4();
+    },
     secret: process.env.KEY,
-    saveUninitialized: true,
+    saveUninitialized: false,
     resave: true,
+    rolling: true,
     cookie: {
-      maxAge: 3600000,
+      maxAge: 180000,
     },
   })
 );
@@ -34,6 +45,9 @@ app.use(
 app.listen(process.env.DEV_PORT, () =>
   console.log("Started server on localhost:" + process.env.DEV_PORT)
 );
+
+//Morgan (logging middleware)
+app.use(morgan('dev'))
 
 //Handlebars middleware
 app.engine(
@@ -47,37 +61,16 @@ app.engine(
 );
 app.set("view engine", ".hbs");
 
-//Middleware function that makes sure that you can't "back-track" on the website
-function noCache(req, res, next) {
-  res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
-  res.header("Expires", "-1");
-  res.header("Pragma", "no-cache");
-  next();
-}
-
-//Login authentication
-function auth(req, res, next) {
-  if (req.session.isAuthenticated) {
-    next();
-  } else {
-    res.redirect("/login");
-  }
-}
-
-//Redirect if logged in
-function redirectToIndexIfLoggedIn(req, res, next) {
-  if (req.session.isAuthenticated) {
-    res.redirect("/");
-  }
-  next();
-}
-
-//Page routes
-//Frontpage (if logged in)
-app.get('/', auth, noCache, redirectToIndexIfLoggedIn, async (req, res) => {
+//Routes
+app.get('/', auth, noCache, async (req, res) => {
+  //Initialize database user finding yes
   const user = await userCollection.findOne({ username: req.session.userid });
-  res.render('index', { user: user.username });
+  res.render('index', { user: user.username })
 });
+
+//Middleware function for redirectToIndexIfLoggedIn
+app.get('/', redirectToIndexIfLoggedIn);
+
 //login route
 app.get('/login', noCache, redirectToIndexIfLoggedIn, (req, res) => {
   res.render("login");
@@ -91,7 +84,7 @@ app.get('/signup', noCache, redirectToIndexIfLoggedIn, (req, res) => {
 //Account page
 app.get('/account', auth, noCache, async (req, res) => {
     const user = await userCollection.findOne( { username: req.session.userid });
-    res.render('account', { user: user.username, email: user.email, password: user.password});
+    res.render('account', { user: user.username, email: user.email, password: user.password, profilePic: user.profilePic});
 })
 
 //Add quiz page
@@ -99,7 +92,7 @@ app.get('/addQuiz', auth, noCache, async (req, res) => {
   res.render('addQuiz')
 })
 
-//API Routes
+//Account routes
 //Signup
 app.post('/signup', require('./controller/signup'))
 
@@ -114,6 +107,10 @@ app.post('/deleteUser', require('./controller/deleteUser'))
 
 //Sign-out (delete session)
 app.get('/signout', require('./controller/signout'))
+
+//Quiz routes
+//Add quiz
+app.post('/addQuiz', require('./controller/addQuiz'))
 
 //Members api routes
 app.use('/api/members', require('../routes/api/members'))

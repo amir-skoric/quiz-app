@@ -18,11 +18,10 @@ const schQuiz = new mongoose.Schema( {
         type: String,
         required: true
     },
-    questions: {
-        type: Array,
-        "default": [String],
+    question: {
+        type: String,
         required: true
-    }
+    },
 })
 
 const quizCollection = new mongoose.model("quizzes", schQuiz);
