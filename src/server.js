@@ -71,8 +71,9 @@ app.get('/', auth, noCache, async (req, res) => {
   //Initialize database user finding yes
   const user = await userCollection.findOne({ username: req.session.userid });
   //Get quizzes from database
-  const allQuizzes = await quizCollection.find();
-  const yourQuizzes = await quizCollection.findOne({ user: req.session.userid})
+  const allQuizzes = await quizCollection.find().lean();
+  const yourQuizzes = await quizCollection.find({ user: req.session.userid}).lean();
+  console.log(yourQuizzes)
   res.render('index', { user: user.username, allQuizzes: allQuizzes, yourQuizzes: yourQuizzes})
 });
 

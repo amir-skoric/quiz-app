@@ -16,15 +16,15 @@
         </hgroup>
         {{#each allQuizzes}}
         <details>
-        <summary>Quiz: Test </summary>
-            <p>Test</p>
+        <summary>Quiz: {{ name }} </summary>
+            <p>Created by: {{ user }}</p>
         </details>
         {{/each}}
         <h2>Your quizzes</h2>
         {{#each yourQuizzes}}
         <details>
-        <summary>Quiz: Test </summary>
-            <p>Test</p>
+        <summary>Quiz: {{ name }} </summary>
+            <p>Created by: {{ user }}</p>
         </details>
         {{/each}}
         <a href="/addQuiz">Add Quiz</a>
