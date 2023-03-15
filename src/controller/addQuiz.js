@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       //delete local user object
       delete quiz;
       res.status(201);
-      res.redirect('/account');
+      res.redirect('/');
     } else {
       //error if quiz with same name exists
       return res.json({ error: "A quiz with the same name already exists!" });

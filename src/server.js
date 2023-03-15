@@ -5,7 +5,11 @@ require("dotenv").config();
 const express = require("express");
 const sessions = require("express-session");
 const exphbs = require("express-handlebars");
+
+//Database
 const userCollection = require("./database/schemas/userCollection");
+const quizCollection = require("./database/schemas/quizCollection");
+
 const path = require("path");
 const morgan = require('morgan');
 const uuid = require('uuid')
@@ -65,7 +69,10 @@ app.set("view engine", ".hbs");
 app.get('/', auth, noCache, async (req, res) => {
   //Initialize database user finding yes
   const user = await userCollection.findOne({ username: req.session.userid });
-  res.render('index', { user: user.username })
+  //Get quizzes from database
+  const quizzes = await quizCollection.find({ user: req.session.userid });
+  
+  res.render('index', { user: user.username, quizzes: quizzes})
 });
 
 //Middleware function for redirectToIndexIfLoggedIn

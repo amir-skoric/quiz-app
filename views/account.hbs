@@ -21,9 +21,9 @@
                 <input type="email" name="email" value="{{ email }}" required>
             <label for="password">Password</label>
                 <input type="password" name="password" minlength="8" required>
-                
             <input type="submit" value="Update" />
         </form>
+        <h4>Warning: This will permanently delete your account and quizzes!</h3>
         <form action="/deleteUser" method="POST">
           <input type="submit" value="Delete Account" style="background-color: rgb(255, 29, 29); border: none;">
         </form>
