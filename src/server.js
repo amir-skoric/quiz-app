@@ -103,9 +103,24 @@ app.get('/addQuiz', auth, noCache, async (req, res) => {
 
 //Quiz page
 app.get('/quiz/:id', auth, noCache, async (req, res) => {
+  const quiz = await quizCollection.findById(req.params.id).lean();
+  res.render('quiz', {quiz: quiz})
+})
+
+//Quiz Results
+app.get('/results/:id&:answers', auth, noCache, async (req, res) => {
   const quiz = await quizCollection.findById(req.params.id)
   console.log(quiz)
-  res.render('quiz', {quiz: quiz})
+  //Answers counter/loop
+  let counter = 0;
+
+  quiz.questions.forEach((e, i) => {
+      if (e.answer === Number(req.params.answers.split(',')[i])) {
+          counter++
+      }
+  })
+  const percentage = Math.round((counter/quiz.questions.length)*100)
+  res.render('results', { results: percentage })
 })
 
 //Account routes
@@ -127,6 +142,9 @@ app.get('/signout', require('./controller/signout'))
 //Quiz routes
 //Add quiz
 app.post('/addQuiz', require('./controller/addQuiz'))
+
+//Quiz checker
+app.post('/quizCheck', require('./controller/quizCheck'))
 
 //Quiz API routes
 app.use('/api/quizzes', require('../routes/api/quizzes'))

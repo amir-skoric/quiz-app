@@ -7,14 +7,26 @@
     <title>Quiz</title>
   </head>
   <body>
+    {{> header}}
     <main class="container">
         <h1>Quiz</h1>
-        <h3>Quiz name: {{ quiz.name }}</h2>
-        <p>Test</p>
-        <p>{{ category }}</p>
-        <p> {{ user }} </p>
-        <p>{{ questions }}</p>
-        <p>{{ created }}</p>
+        <h2>Quiz name: {{ quiz.name }}</h2>
+        <p><strong>Category: </strong>{{ quiz.category }}</p>
+        <p><strong>Created by: </strong> {{ quiz.user }} </p>
+        <p><strong>Date created: </strong>{{ quiz.created }}</p>
+        <form action="/quizCheck" method="POST">
+        {{#each quiz.questions }}
+        <p><strong>Question</strong></p>
+        <p>{{ this.question }}</p>
+        <select name="answer">
+            {{#each this.answers }}
+                <option value="{{ @index }}">{{ this }}</option>
+            {{/each}}
+        </select>
+        {{/each}}
+        <input type="hidden" name="quizID" value="{{ quiz._id }}">
+        <input type="submit">
+        </form>
     </main>
   </body>
 </html>
