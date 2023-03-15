@@ -16,15 +16,19 @@
         </hgroup>
         {{#each allQuizzes}}
         <details>
-        <summary>Quiz: {{ name }} </summary>
-            <p>Created by: {{ user }}</p>
+        <summary><strong>Quiz:</strong> {{ name }} </summary>
+            <p><strong>Created by:</strong> {{ user }}</p>
+            <p><strong>Category:</strong> {{ category }}</p>
+            <a href="/quiz/{{ _id }}" role="button">Take Quiz!</a>
         </details>
         {{/each}}
         <h2>Your quizzes</h2>
         {{#each yourQuizzes}}
         <details>
-        <summary>Quiz: {{ name }} </summary>
-            <p>Created by: {{ user }}</p>
+        <summary><strong>Quiz:</strong> {{ name }} </summary>
+            <p><strong>Created by:</strong> {{ user }}</p>
+            <p><strong>Category:</strong> {{ category }}</p>
+            <a href="/quiz/{{ _id }}" role="button">Take Quiz!</a>
         </details>
         {{/each}}
         <a href="/addQuiz">Add Quiz</a>

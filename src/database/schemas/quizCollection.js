@@ -18,8 +18,9 @@ const schQuiz = new mongoose.Schema({
         type: String,
         required: true
     },
-    question: {
-        type: String,
+    questions: {
+        type: [],
+        default: [],
         required: true
     },
 })

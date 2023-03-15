@@ -7,13 +7,14 @@ const sessions = require("express-session");
 const exphbs = require("express-handlebars");
 
 //Database
-const database = require("./database/database");
+const database = require('./database/database')
 const userCollection = require("./database/schemas/userCollection");
 const quizCollection = require("./database/schemas/quizCollection");
 
 const path = require("path");
 const morgan = require('morgan');
-const uuid = require('uuid')
+const uuid = require('uuid');
+
 //Middleware imports
 const auth = require('./middleware/auth')
 const noCache = require('./middleware/noCache')
@@ -98,6 +99,13 @@ app.get('/account', auth, noCache, async (req, res) => {
 //Add quiz page
 app.get('/addQuiz', auth, noCache, async (req, res) => {
   res.render('addQuiz')
+})
+
+//Quiz page
+app.get('/quiz/:id', auth, noCache, async (req, res) => {
+  const quiz = await quizCollection.findById(req.params.id)
+  console.log(quiz)
+  res.render('quiz', {quiz: quiz})
 })
 
 //Account routes
