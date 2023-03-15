@@ -7,6 +7,7 @@ const sessions = require("express-session");
 const exphbs = require("express-handlebars");
 
 //Database
+const database = require("./database/database");
 const userCollection = require("./database/schemas/userCollection");
 const quizCollection = require("./database/schemas/quizCollection");
 
@@ -70,9 +71,9 @@ app.get('/', auth, noCache, async (req, res) => {
   //Initialize database user finding yes
   const user = await userCollection.findOne({ username: req.session.userid });
   //Get quizzes from database
-  const quizzes = await quizCollection.find({ user: req.session.userid });
-  
-  res.render('index', { user: user.username, quizzes: quizzes})
+  const allQuizzes = await quizCollection.find();
+  const yourQuizzes = await quizCollection.findOne({ user: req.session.userid})
+  res.render('index', { user: user.username, allQuizzes: allQuizzes, yourQuizzes: yourQuizzes})
 });
 
 //Middleware function for redirectToIndexIfLoggedIn
@@ -119,11 +120,10 @@ app.get('/signout', require('./controller/signout'))
 //Add quiz
 app.post('/addQuiz', require('./controller/addQuiz'))
 
-//Members api routes
-app.use('/api/members', require('../routes/api/members'))
+//Quiz API routes
+app.use('/api/quizzes', require('../routes/api/quizzes'))
 
 //404 ROUTE (ALWAYS LAST)
 app.get('*', function(req, res){
-  res.status(404);
-  res.render('404');
+  res.json({ error: "Bad request :("})
 });

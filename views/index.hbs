@@ -12,11 +12,18 @@
     <main class="container">
         <hgroup>
             <h1>Welcome, {{ user }}!</h1>
-            <h2>Your Quizzes</h2>
+            <h2>All quizzes</h2>
         </hgroup>
-        {{#each quizzes}}
+        {{#each allQuizzes}}
         <details>
-        <summary> Quiz: {{ quiz }} </summary>
+        <summary>Quiz: Test </summary>
+            <p>Test</p>
+        </details>
+        {{/each}}
+        <h2>Your quizzes</h2>
+        {{#each yourQuizzes}}
+        <details>
+        <summary>Quiz: Test </summary>
             <p>Test</p>
         </details>
         {{/each}}

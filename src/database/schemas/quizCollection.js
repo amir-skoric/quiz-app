@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 //Quiz Schema
-const schQuiz = new mongoose.Schema( {
+const schQuiz = new mongoose.Schema({
     name: {
         type: String,
         required: true
