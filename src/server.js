@@ -110,7 +110,6 @@ app.get('/quiz/:id', auth, noCache, async (req, res) => {
 //Quiz Results
 app.get('/results/:id&:answers', auth, noCache, async (req, res) => {
   const quiz = await quizCollection.findById(req.params.id)
-  console.log(quiz)
   //Answers counter/loop
   let counter = 0;
 
